@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package submit;
+option go_package = "github.com/ividernvi/algohub/internal/apiserver/proto/submit";
+
+message Case {
+    string input = 1;
+    string expected_output = 2;
+}
+
+// 定义请求体
+message Request {
+    string code = 1;
+    string language = 2;
+    repeated Case cases = 3;
+    int64 time_limit = 4; // ms 毫秒
+    double memory_limit = 5;  // KB 字节
+}
+
+// 定义返回的测试用例信息
+message ReturnCaseInfo {
+    string input = 1;
+    string expected_output = 2;
+    string actual_output = 3;
+}
+
+// 定义响应体
+message Response {
+    string status = 1;
+    string message = 2;
+    int64 execution_time = 3; // ms 毫秒
+    double memory_used = 4;  // KB 字节
+    ReturnCaseInfo case_info = 5;
+}
+service JudgeService {
+    rpc Judge(Request) returns (Response);
+}

@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package user;
+
+option go_package = "github.com/ividernvi/algohub/internal/apiserver/proto/user";
+
+message UserInfo {
+    string username = 1;
+    string nickname = 2;
+    string email = 3;
+    string phone = 4;
+    string bio = 5;
+    string company = 6;
+    string location = 7;
+    string profileUrl = 8;
+}
+
+message GetUserRequest {
+    string username = 1;
+}
+
+message ErrorResponse {
+    int64 code = 1;
+    string message = 2;
+}
+
+service UserInfoService {
+    rpc Create (UserInfo) returns (ErrorResponse);
+    rpc Get (GetUserRequest) returns (UserInfo);
+    rpc Update (UserInfo) returns (ErrorResponse);
+    rpc Delete (GetUserRequest) returns (ErrorResponse);
+}

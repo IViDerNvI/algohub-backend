@@ -1,0 +1,30 @@
+services:
+  minio:
+    image: minio/minio:latest
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    command: server /data
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: algohub
+      MYSQL_USER: algohub
+      MYSQL_PASSWORD: algohub
+
+  app:
+    image: algohub:0.1.0
+    environment:
+      - ALGOHUB_MYSQL_HOSTNAME=db
+      - ALGOHUB_MINIO_ENDPOINT=minio:9000
+      - ALGOHUB_REDIS_HOSTNAME=redis:6379
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    depends_on:
+      - db
+      - minio

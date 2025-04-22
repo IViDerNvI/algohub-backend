@@ -1,0 +1,26 @@
+name: Go Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v3
+      with:
+        go-version: '1.24.0'
+
+    - name: Build the app
+      run: go build -o ./bin/algohub ./cmd/apiserver
+    
+    - name: Run the app
+      run: ./bin/algohub version
