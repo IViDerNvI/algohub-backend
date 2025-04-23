@@ -5,7 +5,7 @@ on:
     tags:
       - "v*.*"
 env:
-  IMAGE_NAME: algohub
+  IMAGE_NAME: algohub-backend
   DOCKER_REGISTRY: ividernvi
 jobs:
   build-image:
