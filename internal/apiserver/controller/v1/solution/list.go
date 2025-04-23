@@ -22,7 +22,7 @@ func (c *SolutionController) List(ctx *gin.Context) {
 	}
 
 	mapper := map[string]string{
-		"problem_id": ctx.Query("problem_id"),
+		"problem_id": ctx.Param("id"),
 	}
 
 	selector := v1.Selector(mapper)

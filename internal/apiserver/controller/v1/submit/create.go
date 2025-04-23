@@ -8,6 +8,7 @@ import (
 	"github.com/ividernvi/algohub/pkg/core"
 	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func (c *SubmitController) Create(ctx *gin.Context) {
@@ -55,7 +56,7 @@ func (c *SubmitController) Create(ctx *gin.Context) {
 	}
 
 	logrus.Infof("Judge endpoint: %s", config.ALGOHUB_JUDGE_RPC_ENDPOINT)
-	conn, err := grpc.NewClient(config.ALGOHUB_JUDGE_RPC_ENDPOINT, grpc.WithInsecure())
+	conn, err := grpc.NewClient(config.ALGOHUB_JUDGE_RPC_ENDPOINT, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		panic(err)
 	}
