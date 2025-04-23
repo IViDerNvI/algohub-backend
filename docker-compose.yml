@@ -17,7 +17,7 @@ services:
       MYSQL_PASSWORD: algohub
 
   app:
-    image: ividernvi/algohub:0.1.0
+    image: ividernvi/algohub:latest-test
     environment:
       - ALGOHUB_MYSQL_HOSTNAME=db
       - ALGOHUB_MINIO_ENDPOINT=minio:9000
