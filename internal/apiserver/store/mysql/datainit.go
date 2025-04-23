@@ -178,8 +178,8 @@ func CreateNormalProblem(db *gorm.DB) {
 		Title:       "a + b",
 		Descrition:  "given a and b, calculate a + b",
 		Author:      "admin",
-		TimeLimit:   1,
-		MemoryLimit: 128,
+		TimeLimit:   1000,
+		MemoryLimit: 125536,
 		Tag:         "math,test,example,easy",
 		Level:       1,
 	})
@@ -190,28 +190,28 @@ func CreateNormalProblem(db *gorm.DB) {
 func CreateNormalSolution(db *gorm.DB) {
 	db.Create(&v1.Solution{
 		ProblemID:  "aPlusb",
-		TestData:   "1,2",
+		TestData:   "1 2",
 		TestResult: "3",
 		Provider:   "admin",
 	})
 
 	db.Create(&v1.Solution{
 		ProblemID:  "aPlusb",
-		TestData:   "3,4",
+		TestData:   "3 4",
 		TestResult: "7",
 		Provider:   "admin",
 	})
 
 	db.Create(&v1.Solution{
 		ProblemID:  "aPlusb",
-		TestData:   "5,6",
+		TestData:   "5 6",
 		TestResult: "11",
 		Provider:   "admin",
 	})
 
 	db.Create(&v1.Solution{
 		ProblemID:  "aPlusb",
-		TestData:   "7,8",
+		TestData:   "7 8",
 		TestResult: "15",
 		Provider:   "admin",
 	})
