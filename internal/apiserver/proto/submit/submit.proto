@@ -1,8 +1,12 @@
 syntax = "proto3";
 
-package submit;
-option go_package = "github.com/ividernvi/algohub/internal/apiserver/proto/submit";
+package grpc;
+option go_package="rpc/pb";
+option java_multiple_files = false;
+option java_package = "org.laoli.api";
+option java_outer_classname = "JudgeCore";
 
+// 定义单个测试用例
 message Case {
     string input = 1;
     string expected_output = 2;
