@@ -7,7 +7,6 @@ import (
 
 	v1 "github.com/ividernvi/algohub/model/v1"
 	minio "github.com/minio/minio-go/v7"
-	"github.com/sirupsen/logrus"
 )
 
 type avatorStore struct {
@@ -21,14 +20,12 @@ func newAvatorStore(cli *minio.Client) *avatorStore {
 func (a *avatorStore) Get(ctx context.Context, userID string, opts *v1.GetOptions) ([]byte, error) {
 	// Implement the logic to get the avatar from MinIO
 	// For example, using MinIO client to fetch the object
-	logrus.Infof("Fetching avatar for user ID: %s", userID)
 	object, err := a.cli.GetObject(ctx, "algohub", userID, minio.GetObjectOptions{})
 	if err != nil {
 		return nil, err
 	}
 	defer object.Close()
 
-	logrus.Infof("Successfully fetched avatar for user ID: %s", userID)
 	// Read the object data and return it
 	data, err := io.ReadAll(object)
 	if err != nil {

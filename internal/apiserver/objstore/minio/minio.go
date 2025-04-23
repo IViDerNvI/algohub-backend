@@ -10,7 +10,6 @@ import (
 	"github.com/ividernvi/algohub/internal/pkg/options"
 	minio "github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
-	"github.com/sirupsen/logrus"
 )
 
 var (
@@ -25,8 +24,7 @@ func GetMinioInstance(opts *options.MinioOptions) (*minio.Client, error) {
 			Secure: opts.UseSSL,
 		})
 		if err != nil {
-			logrus.Panicf("Failed to create MinIO client: %v", err)
-			return
+			panic(err)
 		}
 		MinIOClient = client
 

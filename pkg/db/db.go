@@ -40,7 +40,13 @@ func New(opts DBOptions) (*gorm.DB, error) {
 
 	for i := 0; i < retryCount; i++ {
 		if i > 0 {
-			logrus.Warnf("retrying to connect to database, attempt: %d", i)
+			logrus.WithFields(logrus.Fields{
+				"db_host":  opts.Host(),
+				"db_port":  opts.Port(),
+				"username": opts.Username(),
+				"database": opts.Database(),
+				"times":    i,
+			}).Warnf("retrying to connect to database...")
 		}
 		db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 			Logger: &MyDatabaseLog{},
