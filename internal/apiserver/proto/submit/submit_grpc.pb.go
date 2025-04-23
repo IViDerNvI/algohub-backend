@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	JudgeService_Judge_FullMethodName = "/submit.JudgeService/Judge"
+	JudgeService_Judge_FullMethodName = "/grpc.JudgeService/Judge"
 )
 
 // JudgeServiceClient is the client API for JudgeService service.
@@ -108,7 +108,7 @@ func _JudgeService_Judge_Handler(srv interface{}, ctx context.Context, dec func(
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var JudgeService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "submit.JudgeService",
+	ServiceName: "grpc.JudgeService",
 	HandlerType: (*JudgeServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

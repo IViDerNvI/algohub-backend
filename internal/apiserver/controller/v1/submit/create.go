@@ -1,21 +1,35 @@
 package submit
 
 import (
+	"strings"
+
 	"github.com/gin-gonic/gin"
 	"github.com/ividernvi/algohub/internal/apiserver/config"
 	pb "github.com/ividernvi/algohub/internal/apiserver/proto/submit"
 	v1 "github.com/ividernvi/algohub/model/v1"
 	"github.com/ividernvi/algohub/pkg/core"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func (c *SubmitController) Create(ctx *gin.Context) {
-	var submit v1.Submit
 
-	if err := ctx.ShouldBindJSON(&submit); err != nil {
+	var requestBody struct {
+		ProblemID string `json:"problem_id"`
+		Code      string `json:"code"`
+		Language  string `json:"language"`
+		Cases     []struct {
+			Input          string `json:"input"`
+			ExpectedOutput string `json:"expected_output"`
+		} `json:"cases"`
+	}
+
+	if err := ctx.ShouldBindJSON(&requestBody); err != nil {
 		core.WriteResponse(ctx, err, nil)
 		return
 	}
+
+	var submit v1.Submit
 
 	operatorName, exists := ctx.Get("X-Operation-User-Name")
 	if !exists {
@@ -31,13 +45,16 @@ func (c *SubmitController) Create(ctx *gin.Context) {
 	}
 
 	submit.Status = v1.SubmitStatusPending
+	submit.CodeText = strings.ReplaceAll(requestBody.Code, "\\", "")
+	submit.Language = requestBody.Language
+	submit.ProblemID = requestBody.ProblemID
 
 	if err := submit.Validate(); err != nil {
 		core.WriteResponse(ctx, err, nil)
 		return
 	}
 
-	conn, err := grpc.NewClient(config.ALGOHUB_JUDGE_RPC_ENDPOINT)
+	conn, err := grpc.NewClient(config.ALGOHUB_JUDGE_RPC_ENDPOINT, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		panic(err)
 	}
@@ -49,7 +66,7 @@ func (c *SubmitController) Create(ctx *gin.Context) {
 	}
 
 	mapper := map[string]string{
-		"problem_id": ctx.Query("problem_id"),
+		"problem_id": submit.ProblemID,
 	}
 	selector := v1.Selector(mapper)
 
@@ -76,7 +93,7 @@ func (c *SubmitController) Create(ctx *gin.Context) {
 		Code:        submit.CodeText,
 		Language:    submit.Language,
 		Cases:       cases,
-		TimeLimit:   int64(problem.MemoryLimit),
+		TimeLimit:   int64(problem.TimeLimit),
 		MemoryLimit: problem.MemoryLimit,
 	}
 
