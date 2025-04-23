@@ -21,8 +21,6 @@ func (c *SubmitController) Judge(ctx *gin.Context) {
 			Input          string `json:"input"`
 			ExpectedOutput string `json:"expected_output"`
 		} `json:"cases"`
-		TimeLimit   int `json:"time_limit"`
-		MemoryLimit int `json:"memory_limit"`
 	}
 
 	if err := ctx.ShouldBindJSON(&requestBody); err != nil {
@@ -45,7 +43,8 @@ func (c *SubmitController) Judge(ctx *gin.Context) {
 	var cases []*pb.Case
 	for _, testCase := range requestBody.Cases {
 		cases = append(cases, &pb.Case{
-			Input: testCase.Input,
+			Input:          testCase.Input,
+			ExpectedOutput: testCase.ExpectedOutput,
 		})
 	}
 

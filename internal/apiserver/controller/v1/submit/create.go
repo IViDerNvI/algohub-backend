@@ -1,12 +1,13 @@
 package submit
 
 import (
+	"strings"
+
 	"github.com/gin-gonic/gin"
 	"github.com/ividernvi/algohub/internal/apiserver/config"
 	pb "github.com/ividernvi/algohub/internal/apiserver/proto/submit"
 	v1 "github.com/ividernvi/algohub/model/v1"
 	"github.com/ividernvi/algohub/pkg/core"
-	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
@@ -21,8 +22,6 @@ func (c *SubmitController) Create(ctx *gin.Context) {
 			Input          string `json:"input"`
 			ExpectedOutput string `json:"expected_output"`
 		} `json:"cases"`
-		TimeLimit   int `json:"time_limit"`
-		MemoryLimit int `json:"memory_limit"`
 	}
 
 	if err := ctx.ShouldBindJSON(&requestBody); err != nil {
@@ -46,7 +45,7 @@ func (c *SubmitController) Create(ctx *gin.Context) {
 	}
 
 	submit.Status = v1.SubmitStatusPending
-	submit.CodeText = requestBody.Code
+	submit.CodeText = strings.ReplaceAll(requestBody.Code, "\\", "")
 	submit.Language = requestBody.Language
 	submit.ProblemID = requestBody.ProblemID
 
@@ -55,7 +54,6 @@ func (c *SubmitController) Create(ctx *gin.Context) {
 		return
 	}
 
-	logrus.Infof("Judge endpoint: %s", config.ALGOHUB_JUDGE_RPC_ENDPOINT)
 	conn, err := grpc.NewClient(config.ALGOHUB_JUDGE_RPC_ENDPOINT, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		panic(err)
@@ -95,7 +93,7 @@ func (c *SubmitController) Create(ctx *gin.Context) {
 		Code:        submit.CodeText,
 		Language:    submit.Language,
 		Cases:       cases,
-		TimeLimit:   int64(problem.MemoryLimit),
+		TimeLimit:   int64(problem.TimeLimit),
 		MemoryLimit: problem.MemoryLimit,
 	}
 
