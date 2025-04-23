@@ -6,16 +6,30 @@ import (
 	pb "github.com/ividernvi/algohub/internal/apiserver/proto/submit"
 	v1 "github.com/ividernvi/algohub/model/v1"
 	"github.com/ividernvi/algohub/pkg/core"
+	"github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
 
 func (c *SubmitController) Create(ctx *gin.Context) {
-	var submit v1.Submit
 
-	if err := ctx.ShouldBindJSON(&submit); err != nil {
+	var requestBody struct {
+		ProblemID string `json:"problem_id"`
+		Code      string `json:"code"`
+		Language  string `json:"language"`
+		Cases     []struct {
+			Input          string `json:"input"`
+			ExpectedOutput string `json:"expected_output"`
+		} `json:"cases"`
+		TimeLimit   int `json:"time_limit"`
+		MemoryLimit int `json:"memory_limit"`
+	}
+
+	if err := ctx.ShouldBindJSON(&requestBody); err != nil {
 		core.WriteResponse(ctx, err, nil)
 		return
 	}
+
+	var submit v1.Submit
 
 	operatorName, exists := ctx.Get("X-Operation-User-Name")
 	if !exists {
@@ -31,13 +45,17 @@ func (c *SubmitController) Create(ctx *gin.Context) {
 	}
 
 	submit.Status = v1.SubmitStatusPending
+	submit.CodeText = requestBody.Code
+	submit.Language = requestBody.Language
+	submit.ProblemID = requestBody.ProblemID
 
 	if err := submit.Validate(); err != nil {
 		core.WriteResponse(ctx, err, nil)
 		return
 	}
 
-	conn, err := grpc.NewClient(config.ALGOHUB_JUDGE_RPC_ENDPOINT)
+	logrus.Infof("Judge endpoint: %s", config.ALGOHUB_JUDGE_RPC_ENDPOINT)
+	conn, err := grpc.NewClient(config.ALGOHUB_JUDGE_RPC_ENDPOINT, grpc.WithInsecure())
 	if err != nil {
 		panic(err)
 	}
@@ -49,7 +67,7 @@ func (c *SubmitController) Create(ctx *gin.Context) {
 	}
 
 	mapper := map[string]string{
-		"problem_id": ctx.Query("problem_id"),
+		"problem_id": submit.ProblemID,
 	}
 	selector := v1.Selector(mapper)
 
