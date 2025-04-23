@@ -8,6 +8,7 @@ import (
 	pb "github.com/ividernvi/algohub/internal/apiserver/proto/submit"
 	"github.com/ividernvi/algohub/pkg/core"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func (c *SubmitController) Judge(ctx *gin.Context) {
@@ -36,7 +37,7 @@ func (c *SubmitController) Judge(ctx *gin.Context) {
 		return
 	}
 
-	conn, err := grpc.NewClient(config.ALGOHUB_JUDGE_RPC_ENDPOINT, grpc.WithInsecure())
+	conn, err := grpc.NewClient(config.ALGOHUB_JUDGE_RPC_ENDPOINT, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		panic(err)
 	}

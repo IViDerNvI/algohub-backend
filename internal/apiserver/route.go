@@ -94,6 +94,7 @@ func RegisterRoutes(e *gin.Engine) {
 			problem.PUT("/:id", authorize, mustAdmin, problemController.Update)
 			problem.DELETE("/:id", authorize, mustAdmin, problemController.Delete)
 			problem.GET("/", authorize, problemController.List)
+			problem.GET("/:id/solution", authorize, solutionController.Get)
 		}
 
 		submit := v1.Group("/submit")
@@ -109,11 +110,10 @@ func RegisterRoutes(e *gin.Engine) {
 
 		solution := v1.Group("/solution")
 		{
-			solution.GET("/:id", authorize, solutionController.Get)
-			solution.POST("/", authorize, solutionController.Create)
-			solution.PUT("/:id", authorize, solutionController.Update)
-			solution.DELETE("/:id", authorize, solutionController.Delete)
-			solution.GET("/", authorize, solutionController.List)
+			solution.POST("/:id", authorize, solutionController.Create)
+			solution.PUT("/:id", authorize, mustAdmin, solutionController.Update)
+			solution.DELETE("/:id", authorize, mustAdmin, solutionController.Delete)
+			solution.GET("/:id", authorize, mustAdmin, solutionController.List)
 		}
 
 	}
