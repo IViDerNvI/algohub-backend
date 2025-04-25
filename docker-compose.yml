@@ -21,7 +21,7 @@ services:
 
 
   app:
-    image: ividernvi/algohub-backend:latest-test
+    image: ividernvi/algohub-backend:latest
     environment:
       - ALGOHUB_MYSQL_HOSTNAME=db
       - ALGOHUB_MINIO_ENDPOINT=minio:9000
