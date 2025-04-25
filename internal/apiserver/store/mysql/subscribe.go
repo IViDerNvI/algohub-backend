@@ -21,7 +21,7 @@ func (s *subscribeStore) Create(ctx context.Context, subscribe *v1.Subscribe, op
 
 func (s *subscribeStore) Get(ctx context.Context, sub *v1.Subscribe, opts *v1.GetOptions) (*v1.SubscribeList, error) {
 	var result v1.SubscribeList
-	err := s.db.Model(&v1.Subscribe{}).Where("item_type = ? AND item_id = ?", sub.ItemType, sub.ItemID).Count(&result.TotalItems).Error
+	err := s.db.Model(&v1.Subscribe{}).Where("item_type = ? AND item_name = ?", sub.ItemType, sub.ItemName).Count(&result.TotalItems).Error
 	if err != nil {
 		return nil, err
 	}
@@ -56,5 +56,5 @@ func (s *subscribeStore) Update(ctx context.Context, subscribe *v1.Subscribe, op
 }
 
 func (s *subscribeStore) Delete(ctx context.Context, sub *v1.Subscribe, opts *v1.DeleteOptions) error {
-	return s.db.Where("username = ? AND item_type = ? AND item_id = ?", sub.UserName, sub.ItemType, sub.ItemID).Delete(&v1.Subscribe{}).Error
+	return s.db.Where("username = ? AND item_type = ? AND item_name = ?", sub.UserName, sub.ItemType, sub.ItemName).Delete(&v1.Subscribe{}).Error
 }
