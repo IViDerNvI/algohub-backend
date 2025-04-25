@@ -61,6 +61,7 @@ func CreateNormalPost(db *gorm.DB) {
 		Title:   "Normal Post",
 		Content: "This is a normal post",
 		Author:  "normal",
+		Tag:     "test,normal,example",
 	})
 
 	db.Create(&v1.Post{
@@ -72,10 +73,19 @@ func CreateNormalPost(db *gorm.DB) {
 		Title:   "Another Normal Post",
 		Content: "This is another normal post",
 		Author:  "admin",
+		Tag:     "test,admin,example",
+	})
+
+	db.Create(&v1.Post{
+		Title:   "Solution Post",
+		Content: "This is a solution post",
+		Author:  "normal",
+		Tag:     "solution:aPlusb,easy,math,gready",
 	})
 
 	db.Exec("UPDATE posts SET instance_id = ? WHERE title = ?", 1, "Normal Post")
 	db.Exec("UPDATE posts SET instance_id = ? WHERE title = ?", 2, "Another Normal Post")
+	db.Exec("UPDATE posts SET instance_id = ? WHERE title = ?", 3, "Solution Post")
 
 }
 

@@ -111,5 +111,5 @@ func (c *SubmitController) Create(ctx *gin.Context) {
 		return
 	}
 
-	core.WriteResponse(ctx, nil, submit)
+	core.WriteResponse(ctx, nil, resp)
 }
