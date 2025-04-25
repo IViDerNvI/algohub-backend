@@ -171,7 +171,7 @@ func CreateNormalSubscribe(db *gorm.DB) {
 		},
 		UserName: "normal",
 		ItemType: "user",
-		ItemID:   1,
+		ItemName: "admin",
 	})
 
 	db.Exec("UPDATE subscribes SET instance_id = ? WHERE username = ?", 1, "normal")

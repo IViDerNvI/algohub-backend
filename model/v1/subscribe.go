@@ -12,7 +12,7 @@ type Subscribe struct {
 	ObjMeta  `json:",inline"`
 	UserName string `json:"username" gorm:"column:username;uniqueIndex:idx_username_itemtype_itemid;type:varchar(255)" validate:"required"`
 	ItemType string `json:"item_type" gorm:"column:item_type;uniqueIndex:idx_username_itemtype_itemid;type:varchar(255)" validate:"required;oneof=user"`
-	ItemID   uint   `json:"item_id" gorm:"column:item_id;uniqueIndex:idx_username_itemtype_itemid" validate:"required"`
+	ItemName string `json:"item_name" gorm:"column:item_name;uniqueIndex:idx_username_itemtype_itemid;type:varchar(255)" validate:"required"`
 }
 
 type SubscribeList struct {
@@ -44,6 +44,6 @@ func (s *Subscribe) BeforeUpdate(tx *gorm.DB) error {
 
 func (s *Subscribe) Override(new *Subscribe) *Subscribe {
 	s.ItemType = new.ItemType
-	s.ItemID = new.ItemID
+	s.ItemName = new.ItemName
 	return s
 }
