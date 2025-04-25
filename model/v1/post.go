@@ -15,6 +15,7 @@ type Post struct {
 	Content string `json:"content" gorm:"column:content" validate:"required,min=10,max=500"`
 
 	Author string `json:"author" gorm:"column:author" validate:"required"`
+	Tag    string `json:"tag" gorm:"column:tag"`
 }
 
 type PostList struct {

@@ -25,6 +25,7 @@ func (c *PostController) List(ctx *gin.Context) {
 		"title":   ctx.Query("title"),
 		"content": ctx.Query("content"),
 		"author":  ctx.Query("author"),
+		"tag":     ctx.Query("tag"),
 	}
 
 	selector := v1.Selector(mapper)
