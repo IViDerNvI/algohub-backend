@@ -1,19 +1,13 @@
 package subscribe
 
 import (
-	"strconv"
-
 	"github.com/gin-gonic/gin"
 	v1 "github.com/ividernvi/algohub/model/v1"
 	"github.com/ividernvi/algohub/pkg/core"
 )
 
 func (c *SubscribeController) Create(ctx *gin.Context) {
-	rsrcId, err := strconv.Atoi(ctx.Param("resourceid"))
-	if err != nil {
-		core.WriteResponse(ctx, core.ErrInvalidParams, nil)
-		return
-	}
+	rsrcId := ctx.Param("resourceid")
 
 	rsrcType := ctx.Param("type")
 
@@ -30,7 +24,7 @@ func (c *SubscribeController) Create(ctx *gin.Context) {
 
 	sub := v1.Subscribe{
 		ItemType: rsrcType,
-		ItemID:   uint(rsrcId),
+		ItemName: rsrcId,
 		UserName: opUserName,
 	}
 
