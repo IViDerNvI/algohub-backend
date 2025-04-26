@@ -71,7 +71,7 @@ func CreateNormalPost(db *gorm.DB) {
 			UpdatedAt:  time.Now(),
 		},
 		Title:   "Another Normal Post",
-		Content: "This is another normal post",
+		Content: `This is another normal post`,
 		Author:  "admin",
 		Tag:     "test,admin,example",
 	})

@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/ividernvi/algohub/internal/apiserver/cache"
-	"github.com/ividernvi/algohub/internal/apiserver/objstore"
 	"github.com/ividernvi/algohub/internal/apiserver/store"
+	"github.com/ividernvi/algohub/internal/apiserver/substore"
 	v1 "github.com/ividernvi/algohub/model/v1"
 	"github.com/ividernvi/algohub/pkg/core"
 )
@@ -19,14 +19,13 @@ type UserService interface {
 	Verify(ctx context.Context, token string, opts *v1.VerifyOptions) (*v1.User, error)
 	Authorize(ctx context.Context, token, id string, opts *v1.VerifyOptions) error
 	Logout(ctx context.Context, token string, opts *v1.VerifyOptions) error
-	GetAvatar(ctx context.Context, userID string, opts *v1.GetOptions) ([]byte, error)
-	PutAvatar(ctx context.Context, userID string, data []byte, opts *v1.UpdateOptions) error
+	PutAvatar(ctx context.Context, opts *v1.PutOptions) (*v1.Subject, error)
 }
 
 type userService struct {
 	store store.Store
 	cache cache.Cache
-	minio objstore.ObjStore
+	minio substore.SubStore
 }
 
 func newUserService(s *service) *userService {
@@ -50,7 +49,12 @@ func (s *userService) List(ctx context.Context, opts *v1.ListOptions) (*v1.UserL
 }
 
 func (s *userService) Update(ctx context.Context, user *v1.User, opts *v1.UpdateOptions) error {
-	return s.store.Users().Update(ctx, user, opts)
+	old, err := s.store.Users().Get(ctx, user.UserName, nil)
+	if err != nil {
+		return err
+	}
+
+	return s.store.Users().Update(ctx, old.Override(user), opts)
 }
 
 func (s *userService) Delete(ctx context.Context, username string, opts *v1.DeleteOptions) error {
@@ -86,10 +90,6 @@ func (s *userService) Logout(ctx context.Context, token string, opts *v1.VerifyO
 	return nil
 }
 
-func (s *userService) GetAvatar(ctx context.Context, userID string, opts *v1.GetOptions) ([]byte, error) {
-	return s.minio.Avators().Get(ctx, userID, opts)
-}
-
-func (s *userService) PutAvatar(ctx context.Context, userID string, data []byte, opts *v1.UpdateOptions) error {
-	return s.minio.Avators().Put(ctx, userID, data, opts)
+func (s *userService) PutAvatar(ctx context.Context, opts *v1.PutOptions) (*v1.Subject, error) {
+	return s.minio.AwsStore().Put(ctx, opts)
 }
