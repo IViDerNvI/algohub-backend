@@ -27,7 +27,7 @@ func (u *UserController) PutAvatar(ctx *gin.Context) {
 
 	opUserNameRaw, exists := ctx.Get("X-Operation-User-Name")
 	if !exists {
-		core.WriteResponse(ctx, err, nil)
+		core.WriteResponse(ctx, core.ErrNoAuthorization, nil)
 		return
 	}
 
