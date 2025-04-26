@@ -20,8 +20,8 @@ func NewSecureServeOptions() *SecureServeOptions {
 		BindAddr: "0.0.0.0",
 		BindPort: 8443,
 		CertKeyFile: CertKey{
-			CertFile: "./conf/cert/cert.crt",
-			KeyFile:  "./conf/cert/key.crt",
+			CertFile: "./conf/cert/public.crt",
+			KeyFile:  "./conf/cert/private.key",
 		},
 	}
 }
