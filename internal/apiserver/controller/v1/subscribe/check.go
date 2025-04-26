@@ -22,7 +22,7 @@ func (c *SubscribeController) Check(ctx *gin.Context) {
 	mapper := map[string]string{
 		"item_type": ctx.Param("type"),
 		"username":  opUserName,
-		"item_id":   ctx.Param("resourceid"),
+		"item_name": ctx.Param("resourceid"),
 	}
 
 	selector := v1.Selector(mapper)
