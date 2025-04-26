@@ -9,7 +9,7 @@ import (
 type Like struct {
 	ObjMeta  `json:",inline"`
 	UserName string `json:"username" gorm:"primaryKey;column:username"`
-	ItemType string `json:"item_type" gorm:"primaryKey;column:item_type" validate:"required;oneof:post,comment"`
+	ItemType string `json:"item_type" gorm:"primaryKey;column:item_type" validate:"required,oneof=post comment"`
 	ItemID   uint   `json:"item_id" gorm:"primaryKey;column:item_id" validate:"required"`
 }
 
