@@ -9,14 +9,17 @@ import (
 type Submit struct {
 	ObjMeta `json:",inline"`
 
-	CodeText     string  `json:"code_text" gorm:"column:code_text" validate:"required"`
-	Language     string  `json:"language" gorm:"column:language" validate:"required"`
-	ProblemID    string  `json:"problem_id" gorm:"column:problem_id" validate:"required"`
-	Status       string  `json:"status" gorm:"column:status" validate:"required"`
-	Author       string  `json:"author" gorm:"column:author" validate:"required"`
-	ExcuteTime   int64   `json:"excute_time" gorm:"column:excute_time"`
-	ExcuteMemory float64 `json:"excute_memory" gorm:"column:excute_memory"`
-	Details      string  `json:"details,omitempty" gorm:"column:details"`
+	CodeText       string  `json:"code_text" gorm:"column:code_text" validate:"required"`
+	Language       string  `json:"language" gorm:"column:language" validate:"required"`
+	ProblemID      string  `json:"problem_id" gorm:"column:problem_id" validate:"required"`
+	Status         string  `json:"status" gorm:"column:status" validate:"required"`
+	Author         string  `json:"author" gorm:"column:author" validate:"required"`
+	ExcuteTime     int64   `json:"excute_time" gorm:"column:excute_time"`
+	ExcuteMemory   float64 `json:"excute_memory" gorm:"column:excute_memory"`
+	Details        string  `json:"details,omitempty" gorm:"column:details"`
+	Input          string  `json:"input" gorm:"column:input"`
+	ExpectedOutput string  `json:"expected_output" gorm:"column:expected_output"`
+	ActualOutput   string  `json:"actual_output" gorm:"column:actual_output"`
 }
 
 var (

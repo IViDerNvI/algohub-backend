@@ -105,6 +105,11 @@ func (c *SubmitController) Create(ctx *gin.Context) {
 
 	submit.Status = resp.Status
 	submit.Details = resp.Message
+	submit.ExcuteMemory = resp.MemoryUsed
+	submit.ExcuteTime = resp.ExecutionTime
+	submit.Input = resp.CaseInfo.Input
+	submit.ExpectedOutput = resp.CaseInfo.ExpectedOutput
+	submit.ActualOutput = resp.CaseInfo.ActualOutput
 
 	if err := c.Service.Submits().Create(ctx, &submit, nil); err != nil {
 		core.WriteResponse(ctx, err, nil)
