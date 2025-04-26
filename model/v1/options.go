@@ -107,3 +107,13 @@ func (opts *ListOptions) Complete() {
 		opts.ResourceVersion = "v1"
 	}
 }
+
+type PutOptions struct {
+	ObjMeta `json:",inline"`
+	DryRun  bool `json:"dryRun"`
+
+	Realm      string `json:"realm"`
+	File_UUID  string `json:"file_uuid"`
+	File_type  string `json:"file_type"`
+	File_Bytes []byte `json:"file_bytes"`
+}
