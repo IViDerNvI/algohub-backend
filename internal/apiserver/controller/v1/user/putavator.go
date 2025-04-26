@@ -53,12 +53,12 @@ func (u *UserController) PutAvatar(ctx *gin.Context) {
 		return
 	}
 
-	if u.Srv.Users().Update(ctx, &v1.User{
+	updateErr := u.Srv.Users().Update(ctx, &v1.User{
 		UserName: ctx.Param("id"),
 		Avatar:   avatarUrl.SubUrl,
-	}, &v1.UpdateOptions{}) != nil {
-		core.WriteResponse(ctx, err, nil)
-		return
+	}, &v1.UpdateOptions{})
+	if updateErr != nil {
+		core.WriteResponse(ctx, updateErr, nil)
 	}
 
 	core.WriteResponse(ctx, nil, avatarUrl)
