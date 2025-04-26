@@ -8,11 +8,6 @@ import (
 
 func (c *UserController) Update(ctx *gin.Context) {
 	requestUsername := ctx.Param("id")
-	old, err := c.Srv.Users().Get(ctx, requestUsername, nil)
-	if err != nil {
-		core.WriteResponse(ctx, err, nil)
-		return
-	}
 
 	var user v1.User
 	if err := ctx.ShouldBindJSON(&user); err != nil {
@@ -37,11 +32,11 @@ func (c *UserController) Update(ctx *gin.Context) {
 		return
 	}
 
-	old.Override(&user)
-
-	if err := c.Srv.Users().Update(ctx, old, nil); err != nil {
-		core.WriteResponse(ctx, core.ErrDatabaseUpdate, nil)
+	user.UserName = requestUsername
+	if c.Srv.Users().Update(ctx, &user, nil) != nil {
+		core.WriteResponse(ctx, core.ErrUnknownError, nil)
 		return
 	}
+
 	core.WriteResponse(ctx, nil, nil)
 }

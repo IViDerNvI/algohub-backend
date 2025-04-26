@@ -2,8 +2,8 @@ package service
 
 import (
 	"github.com/ividernvi/algohub/internal/apiserver/cache"
-	"github.com/ividernvi/algohub/internal/apiserver/objstore"
 	"github.com/ividernvi/algohub/internal/apiserver/store"
+	"github.com/ividernvi/algohub/internal/apiserver/substore"
 )
 
 type Service interface {
@@ -15,19 +15,20 @@ type Service interface {
 	Subscribes() SubscribeService
 	Likes() LikeService
 	Solutions() SolutionService
+	Subjects() SubjectService
 }
 
 type service struct {
 	store store.Store
 	cache cache.Cache
-	minio objstore.ObjStore
+	minio substore.SubStore
 }
 
-func NewService(store store.Store) Service {
+func NewService(store store.Store, cache cache.Cache, s3 substore.SubStore) Service {
 	return &service{
 		store: store,
-		cache: cache.CacheFactory(),
-		minio: *objstore.GetObjStore(),
+		cache: cache,
+		minio: s3,
 	}
 }
 
@@ -61,4 +62,8 @@ func (s *service) Comments() CommentService {
 
 func (s *service) Solutions() SolutionService {
 	return newSolutionService(s)
+}
+
+func (s *service) Subjects() SubjectService {
+	return newSubjectService(s.minio)
 }

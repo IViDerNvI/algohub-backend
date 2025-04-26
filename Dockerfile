@@ -22,8 +22,9 @@ WORKDIR /root
 RUN mkdir -p conf/cert
 
 COPY --from=builder /app/algohub ./algohub
-COPY --from=builder /app/conf/cert/cert.crt ./conf/cert/cert.crt
-COPY --from=builder /app/conf/cert/key.crt ./conf/cert/key.crt
+
+# COPY --from=builder /app/conf/cert/public.crt ./conf/cert/public.crt
+# COPY --from=builder /app/conf/cert/private.crt ./conf/cert/private.key
 
 ENV ALGOHUB_MYSQL_HOSTNAME="localhost"
 ENV ALGOHUB_MINIO_ENDPOINT="localhost:9000"

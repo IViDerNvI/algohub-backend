@@ -2,6 +2,7 @@ package apiserver
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/ividernvi/algohub/internal/apiserver/cache"
 	commctl "github.com/ividernvi/algohub/internal/apiserver/controller/v1/comment"
 	likectl "github.com/ividernvi/algohub/internal/apiserver/controller/v1/like"
 	postctl "github.com/ividernvi/algohub/internal/apiserver/controller/v1/post"
@@ -12,20 +13,21 @@ import (
 	userctl "github.com/ividernvi/algohub/internal/apiserver/controller/v1/user"
 	usermiddleware "github.com/ividernvi/algohub/internal/apiserver/middlewares/user"
 	"github.com/ividernvi/algohub/internal/apiserver/store"
+	"github.com/ividernvi/algohub/internal/apiserver/substore"
 )
 
 func RegisterRoutes(e *gin.Engine) {
 	v1 := e.Group("/v1")
 	{
 		// controllers
-		userController := userctl.NewUserController(store.Factory())
-		likeController := likectl.NewLikeController(store.Factory())
-		postController := postctl.NewPostController(store.Factory())
-		commentController := commctl.NewCommentController(store.Factory())
-		problemController := probctl.NewProblemController(store.Factory())
-		submitController := sbmtctl.NewSubmitController(store.Factory())
-		subscribeController := sbscctl.NewSubscribeController(store.Factory())
-		solutionController := soluctl.NewSolutionController(store.Factory())
+		userController := userctl.NewUserController(store.Factory(), cache.CacheFactory(), substore.GetSubStore())
+		likeController := likectl.NewLikeController(store.Factory(), cache.CacheFactory(), substore.GetSubStore())
+		postController := postctl.NewPostController(store.Factory(), cache.CacheFactory(), substore.GetSubStore())
+		commentController := commctl.NewCommentController(store.Factory(), cache.CacheFactory(), substore.GetSubStore())
+		problemController := probctl.NewProblemController(store.Factory(), cache.CacheFactory(), substore.GetSubStore())
+		submitController := sbmtctl.NewSubmitController(store.Factory(), cache.CacheFactory(), substore.GetSubStore())
+		subscribeController := sbscctl.NewSubscribeController(store.Factory(), cache.CacheFactory(), substore.GetSubStore())
+		solutionController := soluctl.NewSolutionController(store.Factory(), cache.CacheFactory(), substore.GetSubStore())
 
 		// middlewares
 		authorize := usermiddleware.Authorize(userController)
@@ -50,8 +52,7 @@ func RegisterRoutes(e *gin.Engine) {
 			// user subscribe items
 			user.GET("/:id/:type/subscribe", subscribeController.List)
 
-			// user avator
-			user.GET("/:id/avatar", userController.GetAvatar)
+			// user avatar
 			user.PUT("/:id/avatar", authorize, mustLogin, userController.PutAvatar)
 		}
 
@@ -62,6 +63,7 @@ func RegisterRoutes(e *gin.Engine) {
 			post.PUT("/:id", authorize, mustLogin, postController.Update)
 			post.DELETE("/:id", authorize, mustLogin, postController.Delete)
 			post.GET("/", authorize, postController.List)
+			post.PUT("/:id/image", authorize, mustLogin, postController.PutImage)
 
 			// post comment
 			post.GET("/:id/comment/:commentid", authorize, commentController.Get)

@@ -7,10 +7,10 @@ import (
 	"github.com/ividernvi/algohub/internal/apiserver/cache"
 	"github.com/ividernvi/algohub/internal/apiserver/cache/ristretto"
 	"github.com/ividernvi/algohub/internal/apiserver/config"
-	"github.com/ividernvi/algohub/internal/apiserver/objstore"
-	"github.com/ividernvi/algohub/internal/apiserver/objstore/minio"
 	"github.com/ividernvi/algohub/internal/apiserver/store"
 	"github.com/ividernvi/algohub/internal/apiserver/store/mysql"
+	"github.com/ividernvi/algohub/internal/apiserver/substore"
+	"github.com/ividernvi/algohub/internal/apiserver/substore/minio"
 	"github.com/spf13/cobra"
 )
 
@@ -42,7 +42,7 @@ var apiserverCmd = &cobra.Command{
 		if err != nil {
 			panic(err)
 		}
-		objstore.SetObjStore(minio.NewObjStore(MinioIns))
+		substore.SetSubStore(minio.NewObjStore(MinioIns))
 
 		// go RunGRPCServer(cfg)
 
