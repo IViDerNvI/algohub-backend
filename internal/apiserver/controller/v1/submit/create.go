@@ -105,8 +105,8 @@ func (c *SubmitController) Create(ctx *gin.Context) {
 
 	submit.Status = resp.Status
 	submit.Details = resp.Message
-	submit.ExcuteMemory = resp.MemoryUsed
-	submit.ExcuteTime = resp.ExecutionTime
+	submit.ExecuteTime = resp.ExecutionTime
+	submit.ExecuteMemory = resp.MemoryUsed
 	submit.Input = resp.CaseInfo.Input
 	submit.ExpectedOutput = resp.CaseInfo.ExpectedOutput
 	submit.ActualOutput = resp.CaseInfo.ActualOutput
