@@ -23,6 +23,7 @@ func (c *ProblemController) List(ctx *gin.Context) {
 
 	mapper := map[string]string{
 		"unique_id": ctx.Query("unique_id"),
+		"title":     ctx.Query("title"),
 		"level":     ctx.Query("level"),
 		"tag":       ctx.Query("tag"),
 	}
