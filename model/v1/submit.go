@@ -14,8 +14,8 @@ type Submit struct {
 	ProblemID      string  `json:"problem_id" gorm:"column:problem_id" validate:"required"`
 	Status         string  `json:"status" gorm:"column:status" validate:"required"`
 	Author         string  `json:"author" gorm:"column:author" validate:"required"`
-	ExcuteTime     int64   `json:"excute_time" gorm:"column:excute_time"`
-	ExcuteMemory   float64 `json:"excute_memory" gorm:"column:excute_memory"`
+	ExecuteTime    int64   `json:"execute_time" gorm:"column:execute_time"`
+	ExecuteMemory  float64 `json:"execute_memory" gorm:"column:execute_memory"`
 	Details        string  `json:"details,omitempty" gorm:"column:details"`
 	Input          string  `json:"input" gorm:"column:input"`
 	ExpectedOutput string  `json:"expected_output" gorm:"column:expected_output"`
