@@ -2,7 +2,7 @@ name: Dependency Update
 
 on:
   schedule:
-    - cron: '0 3 * * 1'  # 每周一凌晨 3 点运行
+    - cron: '0 3 * * 1'
 
 jobs:
   update-dependencies:
@@ -17,6 +17,16 @@ jobs:
         with:
           go-version: 1.20
 
+      - name: Set Go Module Path
+        run: |
+          go env -w GO111MODULE=on
+          go env -w GOPROXY=https://proxy.golang.org,direct
+          go env -w GOMODCACHE=$HOME/go/pkg/mod
+          go env -w GOPATH=$HOME/go
+          mkdir -p $GOPATH/src/github.com/ividernvi
+          ln -s $GITHUB_WORKSPACE $GOPATH/src/github.com/ividernvi/algohub
+          cd $GOPATH/src/github.com/ividernvi/algohub
+
       - name: Update dependencies
         run: go get -u ./...
 
@@ -28,4 +38,4 @@ jobs:
           git commit -m "chore: update dependencies"
           git push
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
