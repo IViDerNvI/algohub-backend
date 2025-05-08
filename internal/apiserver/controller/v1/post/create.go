@@ -14,13 +14,19 @@ func (c *PostController) Create(ctx *gin.Context) {
 		return
 	}
 
-	operatorName := ctx.MustGet("X-Operation-User-Name")
-	operatorStatus := ctx.MustGet("X-Operation-User-Status")
-
-	if operatorStatus != "admin" && operatorName != post.Author {
+	operatorNameRaw, ok := ctx.Get("X-Operation-User-Name")
+	if !ok {
 		core.WriteResponse(ctx, core.ErrNoAuthorization, nil)
 		return
 	}
+
+	operatorName, ok := operatorNameRaw.(string)
+	if !ok {
+		core.WriteResponse(ctx, core.ErrNoAuthorization, nil)
+		return
+	}
+
+	post.Author = operatorName
 
 	if err := post.Validate(); err != nil {
 		core.WriteResponse(ctx, err, nil)
