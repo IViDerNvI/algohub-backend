@@ -35,7 +35,7 @@ func (s *postStore) List(ctx context.Context, opts *v1.ListOptions) (*v1.PostLis
 		return nil, err
 	}
 
-	err = query.Model(&v1.Post{}).Offset(opts.Offset).Limit(opts.Limit).Find(&posts).Error
+	err = query.Model(&v1.Post{}).Order("instance_id DESC").Offset(opts.Offset).Limit(opts.Limit).Find(&posts).Error
 	if err != nil {
 		return nil, err
 	}
