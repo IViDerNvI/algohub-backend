@@ -22,8 +22,7 @@ func (c *SubscribeController) List(ctx *gin.Context) {
 	}
 
 	mapper := map[string]string{
-		"item_type": ctx.Param("type"),
-		"username":  ctx.Param("id"),
+		"username": ctx.Param("id"),
 	}
 
 	selector := v1.Selector(mapper)

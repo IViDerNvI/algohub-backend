@@ -50,7 +50,7 @@ func RegisterRoutes(e *gin.Engine) {
 			user.GET("/:id/:type/like", likeController.List)
 
 			// user subscribe items
-			user.GET("/:id/:type/subscribe", subscribeController.List)
+			user.GET("/:id/subscribe", subscribeController.List)
 
 			// user avatar
 			user.PUT("/:id/avatar", authorize, mustLogin, userController.PutAvatar)

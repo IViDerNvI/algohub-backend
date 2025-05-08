@@ -27,6 +27,8 @@ type User struct {
 	Company    string `json:"company" gorm:"column:company"`
 	Location   string `json:"location" gorm:"column:location"`
 	ProfileURL string `json:"profile_url" gorm:"profile_url"`
+
+	IpAddress string `json:"ip_address" gorm:"column:ip_address"`
 }
 
 type UserList struct {
