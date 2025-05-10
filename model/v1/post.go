@@ -13,6 +13,7 @@ type Post struct {
 
 	Title   string `json:"title" gorm:"column:title" validate:"required,min=5,max=30"`
 	Content string `json:"content" gorm:"column:content" validate:"required,min=10,max=500"`
+	Cover   string `json:"cover" gorm:"column:cover" validate:"omitempty,url"`
 
 	Author string `json:"author" gorm:"column:author" validate:"required"`
 	Tag    string `json:"tag" gorm:"column:tag"`
