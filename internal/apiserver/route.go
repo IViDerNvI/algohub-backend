@@ -71,6 +71,7 @@ func RegisterRoutes(e *gin.Engine) {
 			post.POST("/:id/comment/", authorize, mustLogin, commentController.Create)
 			post.PUT("/:id/comment/:commentid", authorize, mustLogin, commentController.Update)
 			post.DELETE("/:id/comment/:commentid", authorize, mustLogin, commentController.Delete)
+			post.PUT("/:id/comment/:commentid/image", authorize, mustLogin, commentController.PutImage)
 		}
 
 		like := v1.Group("/like")
