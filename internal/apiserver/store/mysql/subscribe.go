@@ -56,5 +56,5 @@ func (s *subscribeStore) Update(ctx context.Context, subscribe *v1.Subscribe, op
 }
 
 func (s *subscribeStore) Delete(ctx context.Context, sub *v1.Subscribe, opts *v1.DeleteOptions) error {
-	return s.db.Where("username = ? AND item_type = ? AND item_name = ?", sub.UserName, sub.ItemType, sub.ItemName).Delete(&v1.Subscribe{}).Error
+	return s.db.Unscoped().Where("username = ? AND item_type = ? AND item_name = ?", sub.UserName, sub.ItemType, sub.ItemName).Delete(&v1.Subscribe{}).Error
 }
